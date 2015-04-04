@@ -10,24 +10,38 @@
     var Logger = require('./helper/logger');
 
     var startMaster = function () {
+        /**
+         * Server level uncaught exception handler in case something is really wrong.
+         * TODO - Replace this with domain and do not drop connections for currently connected clients
+         */
+        process.on('uncaughtException', function (err) {
+            Logger.message('Could not start the server - ' + err.message).setErrorInfo(err).critical();
+            process.exit(1);
+        });
+
         var master = new Master(cluster, APP_NAME);
         master.forkWorkers();
+
+
     };
 
     var startWorkers = function () {
+        /**
+         * Worker level uncaught exception handler in case something is really wrong.
+         * TODO - Replace this with domain and do not drop connections for currently connected clients
+         */
+        process.on('uncaughtException', function (err) {
+            Logger.message('Could not start the app - ' + err.message).setErrorInfo(err).critical();
+            process.exit(1);
+        });
+
         process.title = 'w-' + APP_NAME;
         var App = require('./app');
         var app = new App(6543);
         app.start();
     };
 
-    /**
-     * App level uncaught exception handler in case something is really wrong.
-     * TODO - Replace this with domain and do not drop connections for currently connected clients
-     */
-    process.on('uncaughtException', function (err) {
-        Logger.message('Could not start the app - ' + err.message).setErrorInfo(err).critical();
-    });
+
 
     /**
      * This is the app invocation point.
