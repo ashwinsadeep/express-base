@@ -1,5 +1,5 @@
 # express-base
-Express.js scaffold project with cluster and enrouten integrated
+Express.js base project with cluster and enrouten for improved reliability, error handling and easy routing. Making this public just so that anyone who stumbles upon the same problem will have an easier time setting things up and can spend their time building a robust app rather than spending time wandering mindlessly through endless documentation.
 
 Cluster support will make sure you have a fault tolerant backend which recovers automatically from any programmer errors which might crash your web server process.
 Express-enrouten is used to provide a hierarchial controller structure so that you can have routes were your url's are versioned
